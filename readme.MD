@@ -1,0 +1,1 @@
+JS course page. Known bugs - main modal opens twice by time, if another modal opened before already.
