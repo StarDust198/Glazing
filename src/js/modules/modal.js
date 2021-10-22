@@ -1,7 +1,8 @@
-function modal(btnSelector, modalSelector, closeSelector, showByTime) {
+function modal(btnSelector, modalSelector, closeSelector, showByTime, closeOnOverlay = 'true') {
     const modalBtns = document.querySelectorAll(btnSelector),
           modal = document.querySelector(modalSelector),
-          closeBtn = document.querySelector(closeSelector);
+          closeBtn = document.querySelector(closeSelector),
+          windows = document.querySelectorAll('[data-modal]');
 
     let modalTimer;
     
@@ -18,7 +19,7 @@ function modal(btnSelector, modalSelector, closeSelector, showByTime) {
     };
 
     if (showByTime) {
-        modalTimer = setTimeout(showModal, 60000);
+        // modalTimer = setTimeout(showModal, 60000);
     }
 
     modalBtns.forEach(item => item.addEventListener('click', (e) => {
@@ -26,11 +27,17 @@ function modal(btnSelector, modalSelector, closeSelector, showByTime) {
             e.preventDefault();
         }
         
+        clearInterval(modalTimer);
+        windows.forEach(window => window.style.display = 'none');
+
         showModal();
     }));
 
     modal.addEventListener('click', (e) => {
-        if (e.target == modal || e.target == closeBtn || e.target == closeBtn.firstElementChild) {
+        if ((closeOnOverlay && e.target == modal) || e.target == closeBtn ||
+        e.target == closeBtn.firstElementChild) {
+            windows.forEach(window => window.style.display = 'none');
+
             hideModal();
         }
     });

@@ -1,10 +1,10 @@
-function tabs(linksSelecor, tabsSelector, activeClass, activeSelector = '') {
+function tabs(linksSelecor, tabsSelector, activeClass, activeSelector = '', display = 'block') {
     const tabLinks = document.querySelectorAll(linksSelecor),
           tabs = document.querySelectorAll(tabsSelector);
 
     const showTab = function(n = 0) {
         tabs.forEach(tab => tab.style.display = 'none');
-        tabs[n].style.display = 'block';
+        tabs[n].style.display = display;
         if (activeSelector) {
             tabLinks.forEach(item => item.querySelector(activeSelector).classList.remove(activeClass));
             tabLinks[n].querySelector(activeSelector).classList.add(activeClass);
