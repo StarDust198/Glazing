@@ -1,5 +1,5 @@
-function forms(formSelector) {
-    const allForms = document.querySelectorAll(formSelector),
+function forms(state) {
+    const allForms = document.querySelectorAll('form'),
           phoneInputs = document.querySelectorAll('input[name="user_phone"]');
     
     phoneInputs.forEach(item => {
@@ -33,6 +33,11 @@ function forms(formSelector) {
             form.appendChild(statusMessage);
 
             const formData = new FormData(form);
+            if (form.getAttribute('data-calc') === 'end') {
+                for (let key in state) {
+                    formData.append(key, state[key]);
+                }
+            }
 
             postData('assets/server.php', formData)
                 .then(res => {

@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     modal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close', false);
     modal('.phone_link', '.popup', '.popup .popup_close', true);
-    forms('.form');
+    forms(modalState);
     tabs('.glazing_block', '.glazing_content', 'active', 'a');
     tabs('.no_click', '.decoration_content > .row > div', 'after_click');
 
