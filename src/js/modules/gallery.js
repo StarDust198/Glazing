@@ -1,25 +1,40 @@
-import modal from './modal';
+const gallery = () => {
 
-const gallery = (thumbsSelector) => {
-    const galleryLinks = document.querySelectorAll(thumbsSelector);
+    const galleryField = document.querySelector('.works');
 
-    galleryLinks.forEach((link, i) => {
-        link.classList.add(`gallery_image${i}`);
-        const overlay = document.createElement('div');
-        overlay.classList.add('popup', `popup_gallery${i}`);
+    const overlay = document.createElement('div');
+    overlay.classList.add('popup');
+    overlay.style.cssText = `
+        display: none;
+        justify-content: center;
+        align-items: center;
+    `;
 
-        overlay.innerHTML = `
-            <div class="popup_dialog">
-                <div style="width: auto;" class="popup_content text-center">
-                    <button type="button" class="popup_close"><strong>&times;</strong></button>
-                    <img src="${link.href}" alt="example">
-                </div>
-            </div>`;
+    const img = document.createElement('img');
+    img.style.cssText = `
+        display: block;
+        max-height: 90%;
+        max-width: 90%;
+    `;
+    img.alt = 'window';
+    overlay.append(img);
 
-        console.log(overlay);
-        document.body.append(overlay);
+    galleryField.append(overlay);
 
-        modal(`.gallery_image${i}`, `.popup_gallery${i}`, `.popup_gallery${i} .popup_close`);
+    galleryField.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tgt = e.target;        
+
+        if (tgt && tgt.classList.contains('preview')) {
+            img.src = tgt.parentElement.href;
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        if (tgt && tgt === overlay) {
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }
     });
 };
 

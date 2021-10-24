@@ -17822,9 +17822,8 @@ window.addEventListener('DOMContentLoaded', function () {
   var modalState = {};
   Object(_modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__["default"])(modalState);
   var deadline = '2021-12-15';
-  Object(_modules_gallery__WEBPACK_IMPORTED_MODULE_6__["default"])('.works a');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close', false);
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.phone_link', '.popup', '.popup .popup_close', true);
+  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.phone_link', '[data-modal].popup', '.popup .popup_close', true);
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_block', '.glazing_content', 'active', 'a');
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.no_click', '.decoration_content > .row > div', 'after_click');
@@ -17833,6 +17832,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false);
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false);
   Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('#timer', deadline);
+  Object(_modules_gallery__WEBPACK_IMPORTED_MODULE_6__["default"])();
 });
 
 /***/ }),
@@ -18013,22 +18013,30 @@ function forms(state) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modal */ "./src/js/modules/modal.js");
+var gallery = function gallery() {
+  var galleryField = document.querySelector('.works');
+  var overlay = document.createElement('div');
+  overlay.classList.add('popup');
+  overlay.style.cssText = "\n        display: none;\n        justify-content: center;\n        align-items: center;\n    ";
+  var img = document.createElement('img');
+  img.style.cssText = "\n        display: block;\n        max-height: 90%;\n        max-width: 90%;\n    ";
+  img.alt = 'window';
+  overlay.append(img);
+  galleryField.append(overlay);
+  galleryField.addEventListener('click', function (e) {
+    e.preventDefault();
+    var tgt = e.target;
 
+    if (tgt && tgt.classList.contains('preview')) {
+      img.src = tgt.parentElement.href;
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
 
-
-var gallery = function gallery(thumbsSelector) {
-  var galleryLinks = document.querySelectorAll(thumbsSelector);
-  galleryLinks.forEach(function (link, i) {
-    link.classList.add("gallery_image".concat(i));
-    var overlay = document.createElement('div');
-    overlay.classList.add('popup', "popup_gallery".concat(i));
-    overlay.innerHTML = "\n            <div class=\"popup_dialog\">\n                <div style=\"width: auto;\" class=\"popup_content text-center\">\n                    <button type=\"button\" class=\"popup_close\"><strong>&times;</strong></button>\n                    <img src=\"".concat(link.href, "\" alt=\"example\">\n                </div>\n            </div>");
-    console.log(overlay);
-    document.body.append(overlay);
-    Object(_modal__WEBPACK_IMPORTED_MODULE_1__["default"])(".gallery_image".concat(i), ".popup_gallery".concat(i), ".popup_gallery".concat(i, " .popup_close"));
+    if (tgt && tgt === overlay) {
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
   });
 };
 
