@@ -6,11 +6,16 @@ import modal from './modules/modal';
 import tabs from './modules/tabs';
 import forms from './modules/forms';
 import changeModalState from './modules/changeModalState';
+import timer from './modules/timer';
+import gallery from './modules/gallery';
 
 window.addEventListener('DOMContentLoaded', () => {
     let modalState = {};
-
     changeModalState(modalState);
+
+    const deadline = '2021-12-15';
+
+    gallery('.works a');
 
     modal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close', false);
     modal('.phone_link', '.popup', '.popup .popup_close', true);
@@ -23,5 +28,5 @@ window.addEventListener('DOMContentLoaded', () => {
     modal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false);
     modal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false);
 
-    
+    timer('#timer', deadline);
 });
