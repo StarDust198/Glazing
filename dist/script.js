@@ -17837,6 +17837,31 @@ window.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./src/js/modules/calcScroll.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/calcScroll.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function calcScroll() {
+  var div = document.createElement('div');
+  div.style.width = '50px';
+  div.style.height = '50px';
+  div.style.overflowY = 'scroll';
+  div.style.visility = 'hidden';
+  document.body.appendChild(div);
+  var scrollWidth = div.offsetWidth - div.clientWidth;
+  div.remove();
+  return scrollWidth;
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (calcScroll);
+
+/***/ }),
+
 /***/ "./src/js/modules/changeModalState.js":
 /*!********************************************!*\
   !*** ./src/js/modules/changeModalState.js ***!
@@ -17909,8 +17934,6 @@ var changeModalState = function changeModalState(state) {
             state[prop] = item.value;
             break;
         }
-
-        console.log(state);
       });
     });
   };
@@ -18046,8 +18069,12 @@ function forms(state) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _calcScroll__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./calcScroll */ "./src/js/modules/calcScroll.js");
+
+
 var gallery = function gallery() {
-  var galleryField = document.querySelector('.works');
+  var galleryField = document.querySelector('.works'),
+      scroll = Object(_calcScroll__WEBPACK_IMPORTED_MODULE_0__["default"])();
   var overlay = document.createElement('div');
   overlay.classList.add('popup');
   overlay.style.cssText = "\n        display: none;\n        justify-content: center;\n        align-items: center;\n    ";
@@ -18064,11 +18091,13 @@ var gallery = function gallery() {
       img.src = tgt.parentElement.href;
       overlay.style.display = 'flex';
       document.body.style.overflow = 'hidden';
+      document.body.style.marginRight = "".concat(scroll, "px");
     }
 
     if (tgt && tgt === overlay) {
       overlay.style.display = 'none';
       document.body.style.overflow = '';
+      document.body.style.marginRight = "0px";
     }
   });
 };
@@ -18088,6 +18117,8 @@ var gallery = function gallery() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _calcScroll__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./calcScroll */ "./src/js/modules/calcScroll.js");
+
 
 
 function modal(btnSelector, modalSelector, closeSelector, showByTime) {
@@ -18095,20 +18126,24 @@ function modal(btnSelector, modalSelector, closeSelector, showByTime) {
   var modalBtns = document.querySelectorAll(btnSelector),
       modal = document.querySelector(modalSelector),
       closeBtn = document.querySelector(closeSelector),
-      windows = document.querySelectorAll('[data-modal]');
+      windows = document.querySelectorAll('[data-modal]'),
+      scroll = Object(_calcScroll__WEBPACK_IMPORTED_MODULE_1__["default"])();
   var modalTimer;
 
   var showModal = function showModal() {
     modal.style.display = "block";
-    document.body.style.overflow = "hidden"; // document.body.classList.add('modal-open');
+    document.body.style.overflow = "hidden";
+    document.body.style.marginRight = "".concat(scroll, "px"); // document.body.classList.add('modal-open');
   };
 
   var hideModal = function hideModal() {
     modal.style.display = "none";
-    document.body.style.overflow = ""; // document.body.classList.remove('modal-open');
+    document.body.style.overflow = "";
+    document.body.style.marginRight = "0px"; // document.body.classList.remove('modal-open');
   };
 
-  if (showByTime) {// modalTimer = setTimeout(showModal, 60000);
+  if (showByTime) {
+    modalTimer = setTimeout(showModal, 60000);
   }
 
   modalBtns.forEach(function (item) {
