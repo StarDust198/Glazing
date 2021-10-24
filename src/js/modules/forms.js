@@ -1,6 +1,7 @@
 function forms(state) {
     const allForms = document.querySelectorAll('form'),
-          phoneInputs = document.querySelectorAll('input[name="user_phone"]');
+          phoneInputs = document.querySelectorAll('input[name="user_phone"]'),
+          windows = document.querySelectorAll('[data-modal]');
     
     phoneInputs.forEach(item => {
         item.addEventListener('input', () => {
@@ -48,7 +49,10 @@ function forms(state) {
                 }).finally(() => {
                     form.reset();
                     setTimeout(() => {
-                        statusMessage.remove();
+                        windows.forEach(window => window.style.display = 'none');               
+                    }, 3000);                    
+                    setTimeout(() => {
+                        statusMessage.remove();                        
                     }, 5000);
                 });
         });

@@ -17829,8 +17829,8 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.no_click', '.decoration_content > .row > div', 'after_click');
   Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.balcon_icons_img', '.big_img.text-center > img', 'do_image_more', '', 'inline');
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false);
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false);
+  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false, false);
+  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false, false);
   Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('#timer', deadline);
   Object(_modules_gallery__WEBPACK_IMPORTED_MODULE_6__["default"])();
 });
@@ -17858,7 +17858,29 @@ var changeModalState = function changeModalState(state) {
       windowWidth = document.querySelectorAll('#width'),
       windowHeight = document.querySelectorAll('#height'),
       windowType = document.querySelectorAll('#view_type'),
-      windowProfile = document.querySelectorAll('.checkbox');
+      windowProfile = document.querySelectorAll('.checkbox'),
+      btn = document.querySelector('.popup_calc_button'),
+      btn2 = document.querySelector('.popup_calc_profile_button');
+  state.form = 0;
+  state.type = 'tree';
+
+  var checkFilledFields = function checkFilledFields() {
+    if (!state.height || !state.width) {
+      btn.disabled = true;
+      btn.title = 'Введите числа для продолжения';
+    } else {
+      btn.disabled = false;
+      btn.title = '';
+    }
+
+    if (!state.profile) {
+      btn2.disabled = true;
+      btn2.title = 'Выберите тип остекления';
+    } else {
+      btn2.disabled = false;
+      btn2.title = '';
+    }
+  };
 
   var bindActionToElems = function bindActionToElems(eventName, elem, prop) {
     elem.forEach(function (item, i) {
@@ -17874,9 +17896,11 @@ var changeModalState = function changeModalState(state) {
               elem.forEach(function (option, j) {
                 j !== i ? option.checked = false : option.checked = true;
               });
+              checkFilledFields();
             } else {
               item.value = item.value.replace(/\D/g, '');
               state[prop] = item.value;
+              checkFilledFields();
             }
 
             break;
@@ -17885,6 +17909,8 @@ var changeModalState = function changeModalState(state) {
             state[prop] = item.value;
             break;
         }
+
+        console.log(state);
       });
     });
   };
@@ -17894,6 +17920,7 @@ var changeModalState = function changeModalState(state) {
   bindActionToElems('input', windowHeight, 'height');
   bindActionToElems('change', windowType, 'type');
   bindActionToElems('change', windowProfile, 'profile');
+  checkFilledFields();
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (changeModalState);
@@ -17930,7 +17957,8 @@ __webpack_require__.r(__webpack_exports__);
 
 function forms(state) {
   var allForms = document.querySelectorAll('form'),
-      phoneInputs = document.querySelectorAll('input[name="user_phone"]');
+      phoneInputs = document.querySelectorAll('input[name="user_phone"]'),
+      windows = document.querySelectorAll('[data-modal]');
   phoneInputs.forEach(function (item) {
     item.addEventListener('input', function () {
       item.value = item.value.replace(/[^0-9\+\-\(\)]/g, '');
@@ -17992,6 +18020,11 @@ function forms(state) {
         statusMessage.textContent = message.failure;
       }).finally(function () {
         form.reset();
+        setTimeout(function () {
+          windows.forEach(function (window) {
+            return window.style.display = 'none';
+          });
+        }, 3000);
         setTimeout(function () {
           statusMessage.remove();
         }, 5000);
