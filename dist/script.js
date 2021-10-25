@@ -17803,7 +17803,7 @@ module.exports = g;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./slider */ "./src/js/slider.js");
-/* harmony import */ var _modules_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/modal */ "./src/js/modules/modal.js");
+/* harmony import */ var _modules_modals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/modals */ "./src/js/modules/modals.js");
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
 /* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
@@ -17822,15 +17822,11 @@ window.addEventListener('DOMContentLoaded', function () {
   var modalState = {};
   Object(_modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__["default"])(modalState);
   var deadline = '2021-12-15';
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close', false);
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.phone_link', '[data-modal].popup', '.popup .popup_close', true);
   Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
+  Object(_modules_modals__WEBPACK_IMPORTED_MODULE_1__["default"])();
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_block', '.glazing_content', 'active', 'a');
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.no_click', '.decoration_content > .row > div', 'after_click');
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.balcon_icons_img', '.big_img.text-center > img', 'do_image_more', '', 'inline');
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false, false);
-  Object(_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false, false);
   Object(_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])('#timer', deadline);
   Object(_modules_gallery__WEBPACK_IMPORTED_MODULE_6__["default"])();
 });
@@ -18106,10 +18102,10 @@ var gallery = function gallery() {
 
 /***/ }),
 
-/***/ "./src/js/modules/modal.js":
-/*!*********************************!*\
-  !*** ./src/js/modules/modal.js ***!
-  \*********************************/
+/***/ "./src/js/modules/modals.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/modals.js ***!
+  \**********************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -18121,55 +18117,61 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function modal(btnSelector, modalSelector, closeSelector, showByTime) {
-  var closeOnOverlay = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'true';
-  var modalBtns = document.querySelectorAll(btnSelector),
-      modal = document.querySelector(modalSelector),
-      closeBtn = document.querySelector(closeSelector),
-      windows = document.querySelectorAll('[data-modal]'),
-      scroll = Object(_calcScroll__WEBPACK_IMPORTED_MODULE_1__["default"])();
-  var modalTimer;
-
-  var showModal = function showModal() {
+var modals = function modals() {
+  function showModal(modal) {
     modal.style.display = "block";
     document.body.style.overflow = "hidden";
-    document.body.style.marginRight = "".concat(scroll, "px"); // document.body.classList.add('modal-open');
-  };
-
-  var hideModal = function hideModal() {
-    modal.style.display = "none";
-    document.body.style.overflow = "";
-    document.body.style.marginRight = "0px"; // document.body.classList.remove('modal-open');
-  };
-
-  if (showByTime) {
-    modalTimer = setTimeout(showModal, 60000);
+    document.body.style.marginRight = "".concat(Object(_calcScroll__WEBPACK_IMPORTED_MODULE_1__["default"])(), "px");
   }
 
-  modalBtns.forEach(function (item) {
-    return item.addEventListener('click', function (e) {
-      if (e.target) {
-        e.preventDefault();
-      }
+  function hideModal(modal) {
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+    document.body.style.marginRight = "0px";
+  } // timer
 
-      clearInterval(modalTimer);
-      windows.forEach(function (window) {
-        return window.style.display = 'none';
+
+  var modalTimer = setTimeout(function () {
+    showModal(document.querySelector('[data-modal].popup'));
+  }, 60000);
+
+  var bindModal = function bindModal(btnSelector, modalSelector, closeSelector) {
+    var closeOnOverlay = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'true';
+    var modalBtns = document.querySelectorAll(btnSelector),
+        modal = document.querySelector(modalSelector),
+        closeBtn = document.querySelector(closeSelector),
+        windows = document.querySelectorAll('[data-modal]');
+    modalBtns.forEach(function (item) {
+      return item.addEventListener('click', function (e) {
+        if (e.target) {
+          e.preventDefault();
+        }
+
+        clearInterval(modalTimer);
+        windows.forEach(function (window) {
+          return window.style.display = 'none';
+        });
+        showModal(modal);
       });
-      showModal();
     });
-  });
-  modal.addEventListener('click', function (e) {
-    if (closeOnOverlay && e.target == modal || e.target == closeBtn || e.target == closeBtn.firstElementChild) {
-      windows.forEach(function (window) {
-        return window.style.display = 'none';
-      });
-      hideModal();
-    }
-  });
-}
+    modal.addEventListener('click', function (e) {
+      if (closeOnOverlay && e.target == modal || e.target == closeBtn || e.target == closeBtn.firstElementChild) {
+        windows.forEach(function (window) {
+          return window.style.display = 'none';
+        });
+        hideModal(modal);
+      }
+    });
+  };
 
-/* harmony default export */ __webpack_exports__["default"] = (modal);
+  bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
+  bindModal('.phone_link', '[data-modal].popup', '.popup .popup_close');
+  bindModal('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
+  bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false);
+  bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (modals);
 
 /***/ }),
 
